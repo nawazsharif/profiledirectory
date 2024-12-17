@@ -26,25 +26,15 @@ Example context (json):
 }}
 
 <style>
-    .profile-section,
-    .accounts-section,
-    .bills-section {
-        background-color: #ffffff;
-        padding: 20px;
+    .custom-rounded {
         border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        flex: 1;
     }
 
-
-    .profile-header {
-        /* display: flex;
-        align-items: center;
-        margin-bottom: 20px; */
+    .custom-shadow {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
     .profile-pic {
-
         width: 200px;
         border-radius: 50%;
     }
@@ -59,11 +49,7 @@ Example context (json):
         color: #555;
     }
 
-    .sms-alerts {
-        margin-bottom: 20px;
-    }
-
-    .save-btn {
+    .edit-btn {
         background-color: #FF5F5F;
         color: white;
         padding: 10px;
@@ -73,7 +59,7 @@ Example context (json):
         width: 100%;
     }
 
-    .save-btn:hover {
+    .edit-btn:hover {
         background-color: #FF4040;
     }
 
@@ -84,37 +70,12 @@ Example context (json):
         font-weight: 600;
     }
 
-    .account,
-    .bill {
-        margin-bottom: 15px;
-    }
-
-    .account h4,
-    .bill h4 {
-        font-size: 16px;
-        font-weight: 600;
-    }
-
     .account p,
     .bill p {
         font-size: 14px;
         color: #555;
     }
 
-    .account button,
-    .bill button {
-        padding: 8px 15px;
-        background-color: #FF5F5F;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .account button:hover,
-    .bill button:hover {
-        background-color: #FF4040;
-    }
 
     .main-layout {
         display: grid;
@@ -130,43 +91,18 @@ Example context (json):
         gap: 2rem;
     }
 
-    .filters-panel {
-        background: #ffffff;
-        border-radius: 8px;
-        padding: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        margin-bottom: 15px;
-    }
-
     .user-list {
-        background: #ffffff;
-        border-radius: 8px;
-        padding: 15px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         min-height: 100%;
         overflow-y: auto;
     }
 
     .user-list-item {
-        padding: 10px;
         border-bottom: 1px solid #ddd;
         cursor: pointer;
     }
 
     .user-list-item:hover {
         background-color: #f0f8ff;
-    }
-
-    .user-profile {
-        background: #ffffff;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .user-profile h5 {
-        color: #007acc;
-        font-weight: bold;
     }
 
     .user-profile img {
@@ -181,37 +117,24 @@ Example context (json):
 
 <body>
     <div class="container mt-5">
-        <!-- <div class="filters-panel d-flex justify-content-between">
-            <div class="filters-group me-2">
-                <label for="filter1">Filter 1</label>
-                <select id="filter1" class="form-select">
-                    <option value="">Select...</option>
-                    <option value="1">Option 1</option>
-                    <option value="2">Option 2</option>
-                </select>
-            </div>
-            <div class="filters-group me-2">
-                <label for="filter2">Filter 2</label>
-                <select id="filter2" class="form-select">
-                    <option value="">Select...</option>
-                    <option value="1">Option 1</option>
-                    <option value="2">Option 2</option>
-                </select>
-            </div>
-            <div class="filters-group">
-                <label for="filter3">Filter 3</label>
-                <select id="filter3" class="form-select">
-                    <option value="">Select...</option>
-                    <option value="1">Option 1</option>
-                    <option value="2">Option 2</option>
-                </select>
-            </div>
+        <!-- <div class="custom-rounded custom-shadow col-3 mr-5 p-0">
+          <div class=" border-bottom  bg-light">
+            <h6 class="px-3 py-2 ">Filter</h6>
+          </div>
+          <div class="my-3 px-3">
+            {{{filterform}}}
+          </div>
         </div> -->
         <div class="row">
-            <div class="col-md-4">
+
+            <div class="col-md-4 custom-rounded custom-shadow px-0">
                 <div class="user-list">
+                    <div class=" border-bottom  bg-light">
+                        <h6 class="px-3 py-2 mb-0">Users</h6>
+                    </div>
                     {{#user}}
-                    <div class="user-list-item"> <a href="?id={{userid}}" class="d-block">{{firstname}} {{surname}}</a>
+                    <div class="user-list-item px-3 py-2"> <a href="?id={{userid}}"
+                            class="d-block text-decoration-none">{{firstname}} {{surname}}</a>
                     </div>
                     {{/user}}
 
@@ -220,45 +143,52 @@ Example context (json):
             {{#userdata}}
             <div class="col-md-8">
                 <div class="main-layout">
-                    <div class="profile-section">
+                    <div class="custom-rounded custom-shadow p-3">
                         <div class="profile-header mx-auto">
                             <div class="d-flex justify-content-center mb-3">
                                 <img src="{{photourl}}" alt="Profile Picture" class="profile-pic">
                             </div>
-
                             <div class="profile-details">
                                 <h2 class="text-center">{{firstname}} {{surname}}</h2>
-                                <p>{{phone}}</p>
-                                <p>{{email}}</p>
-                                <p>{{website}}</p>
+                            </div>
+                            <div class="profile-details custom-rounded p-3">
+
+                                <h6>Phone</h6>
+                                <p class="bg-light p-2 custom-rounded">{{phone}}</p>
+                                <h6>Email</h6>
+                                <p class="bg-light p-2 custom-rounded">{{email}}</p>
+                                <h6>Web Address</h6>
+                                <p class="bg-light p-2 custom-rounded">{{website}}</p>
                             </div>
                         </div>
-                        <button class="save-btn">Edit</button>
+                        <a href="index.php?id={{userid}}" class="edit-btn d-block text-center text-decoration-none text-white">Edit</a>
                     </div>
                     <div class="secondary-layout">
-                        <div class="accounts-section">
-                            <div class="accounts-header">
-                                <h3>Qualifications</h3>
+                        <div class="custom-rounded custom-shadow">
+                            <div class="border-bottom py-2 px-3">
+                                <h5>Qualifications</h5>
                             </div>
-                            <div class="account">
-                                <p>{{qualifications}}</p>
-                                <p>{{post_nominals}}</p>
-                                <p>{{ahpranumber}}</p>
-                                <p>{{category_id}}</p>
+                            <div class="px-3 py-2">
+                                <h6>Qualification</h6>
+                                <p class="bg-light p-2 custom-rounded">{{qualifications}}</p>
+                                <h6>Post Nominals</h6>
+                                <p class="bg-light p-2 custom-rounded">{{post_nominals}}</p>
+                                <h6>AHPRA Number</h6>
+                                <p class="bg-light p-2 custom-rounded">{{ahpranumber}}</p>
+                                <h6>Category</h6>
+                                <p class="bg-light p-2 custom-rounded">{{category_id}}</p>
                             </div>
                         </div>
 
-                        <div class="bills-section">
-                            <div class="bills-header">
-                                <h3>Others</h3>
+                        <div class="custom-rounded custom-shadow">
+                            <div class="border-bottom py-2 px-3">
+                                <h5 class="">Others</h5>
                             </div>
-                            <div class="bill">
+                            <div class="px-3 py-2">
                                 <h6>Other associations</h6>
-                                <p>{{other_associations}}</p>
-                            </div>
-                            <div class="bill">
+                                <p class="bg-light p-2 custom-rounded">{{other_associations}}</p>
                                 <h6>Speciality</h6>
-                                <p>{{specialties}}</p>
+                                <p class="bg-light p-2 custom-rounded">{{specialties}}</p>
                             </div>
                         </div>
                     </div>

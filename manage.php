@@ -23,7 +23,7 @@
  */
 
 require('../../config.php');
-
+use local_profile_directory\user_filter;
 require_login();
 $userid = optional_param('id', 0, PARAM_INT);
 $url = new moodle_url('/local/profile_directory/manage.php', []);
@@ -38,16 +38,29 @@ $PAGE->set_primary_active_tab('siteadminnode');
 $PAGE->set_secondary_active_tab('users');
 $PAGE->navbar->add(get_string('userdetails', 'local_profile_directory'), $PAGE->url);
 
+$filterdata = $DB->get_records('local_profile_directory');
 
-echo $OUTPUT->header();
-$sql = "SELECT id, firstname, surname, userid
-          FROM {local_profile_directory}";
-$data = $DB->get_records_sql($sql);
+$filterform = new user_filter($url, $filterdata);
+$data = "";
+
+
+if ($formdata = $filterform->get_data()) {
+    // $data = $DB->get_records('local_profile_directory',['']);
+
+} else {
+    $sql = "SELECT id, firstname, surname, userid
+    FROM {local_profile_directory}";
+    $data = $DB->get_records_sql($sql);
+}
+
 $default = array_values($data)[0]->userid;
 $userdata = [];
-$userdata = $DB->get_record('local_profile_directory', ['userid' =>  $userid > 0 ? $userid : $default]);
+$userdata = $DB->get_record('local_profile_directory', ['userid' => $userid > 0 ? $userid : $default]);
+
+echo $OUTPUT->header();
 
 $context = [
+    'filterform' => $filterform->render(),
     'user' => array_values($data),
     'userdata' => $userdata,
 ];
