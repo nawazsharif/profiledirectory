@@ -15,18 +15,24 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information for Profile directory
+ * TODO describe file view
  *
  * @package    local_profile_directory
  * @copyright  2024 Brain Station 23 <sales@brainstation-23.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+require('../../config.php');
 
-$plugin->component    = 'local_profile_directory';
-$plugin->release      = '1.0';
-$plugin->version      = 2024121001;
-$plugin->requires     = 2024042200;
-$plugin->supported    = [404, 500];
-$plugin->maturity     = MATURITY_STABLE;
+require_login();
+$userid = required_param('user', PARAM_INT);
+$url = new moodle_url('/local/profile_directory/view.php', []);
+$PAGE->set_url($url);
+$PAGE->set_context(context_system::instance());
+$PAGE->set_pagelayout('admin');
+$PAGE->set_heading($SITE->fullname);
+$PAGE->set_secondary_active_tab('users');
+echo $OUTPUT->header();
+$data = $DB->get_record('local_profile_directory', ['userid' => $userid]);
+echo $OUTPUT->render_from_template('local_profile_directory/profile_view', ['userdata' => $data]);
+echo $OUTPUT->footer();

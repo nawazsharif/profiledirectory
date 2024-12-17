@@ -1,0 +1,180 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_profile_directory/profile_view
+
+    TODO describe template profile_view
+
+    Example context (json):
+    {
+    }
+}}
+
+<style>
+
+    .custom-rounded {
+        border-radius: 10px;
+    }
+
+    .custom-shadow {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-pic {
+        width: 200px;
+        border-radius: 50%;
+    }
+
+    .profile-details h2 {
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .profile-details p {
+        font-size: 14px;
+        color: #555;
+    }
+
+    .edit-btn {
+        background-color: #FF5F5F;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .edit-btn:hover {
+        background-color: #FF4040;
+    }
+
+    .accounts-section .accounts-header,
+    .bills-section .bills-header {
+        margin-bottom: 15px;
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    .account p,
+    .bill p {
+        font-size: 14px;
+        color: #555;
+    }
+
+
+    .main-layout {
+        display: grid;
+        gap: 2rem;
+        width: 100%;
+        grid-template-columns: 400px 400px;
+
+    }
+
+    .secondary-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .user-list {
+        min-height: 100%;
+        overflow-y: auto;
+    }
+
+    .user-list-item {
+        border-bottom: 1px solid #ddd;
+        cursor: pointer;
+    }
+
+    .user-list-item:hover {
+        background-color: #f0f8ff;
+    }
+
+    .user-profile img {
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        margin-bottom: 15px;
+    }
+</style>
+
+    <div class="container mt-5 ">
+        <div class="row justify-content-center">
+            {{#userdata}}
+            <div class="">
+                <div class="main-layout">
+                    <div class="custom-rounded custom-shadow p-3">
+                        <div class="profile-header mx-auto">
+                            <div class="d-flex justify-content-center mb-3">
+                                <img src="{{photourl}}" alt="Profile Picture" class="profile-pic">
+                            </div>
+                            <div class="profile-details">
+                                <h2 class="text-center">{{firstname}} {{surname}}</h2>
+                            </div>
+                            <div class="profile-details custom-rounded p-3">
+
+                                <h6>Phone</h6>
+                                <p class="bg-light p-2 custom-rounded">{{phone}}</p>
+                                <h6>Email</h6>
+                                <p class="bg-light p-2 custom-rounded">{{email}}</p>
+                                <h6>Web Address</h6>
+                                <p class="bg-light p-2 custom-rounded">{{website}}</p>
+                            </div>
+                        </div>
+                        <a href="index.php?id={{userid}}" class="edit-btn d-block text-center text-decoration-none text-white">Edit</a>
+                    </div>
+                    <div class="secondary-layout">
+                        <div class="custom-rounded custom-shadow">
+                            <div class="border-bottom py-2 px-3">
+                                <h5>Qualifications</h5>
+                            </div>
+                            <div class="px-3 py-2">
+                                <h6>Qualification</h6>
+                                <p class="bg-light p-2 custom-rounded">{{qualifications}}</p>
+                                <h6>Post Nominals</h6>
+                                <p class="bg-light p-2 custom-rounded">{{post_nominals}}</p>
+                                <h6>AHPRA Number</h6>
+                                <p class="bg-light p-2 custom-rounded">{{ahpranumber}}</p>
+                                <h6>Category</h6>
+                                <p class="bg-light p-2 custom-rounded">{{category_id}}</p>
+                            </div>
+                        </div>
+
+                        <div class="custom-rounded custom-shadow">
+                            <div class="border-bottom py-2 px-3">
+                                <h5 class="">Others</h5>
+                            </div>
+                            <div class="px-3 py-2">
+                                <h6>Other associations</h6>
+                                <p class="bg-light p-2 custom-rounded">{{other_associations}}</p>
+                                <h6>Speciality</h6>
+                                <p class="bg-light p-2 custom-rounded">{{specialties}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/userdata}}
+            {{^userdata}}
+            <div class="col-md-8">
+                <!-- <h5>Select a User</h5> -->
+            </div>
+            {{/userdata}}
+        </div>
+    </div>

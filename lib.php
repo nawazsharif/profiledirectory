@@ -66,6 +66,7 @@ function local_profile_directory_pluginfile($course, $cm, $context, $filearea, $
 }
 
 function local_profile_directory_file_urlcreate($context, $draftitemid, $fileinfo) {
+    global $USER;
     $fs = get_file_storage();
     $files = $fs->get_area_files($context->id, 'user', 'draft', $draftitemid, 'itemid', false);
 
@@ -73,6 +74,11 @@ function local_profile_directory_file_urlcreate($context, $draftitemid, $fileinf
 
         if ($file->get_filename() != '.') {
             $fileinfo['filename'] = $file->get_filename();
+
+            $existingfile = $fs->get_file($context->id, 'local_profile_directory', 'images', $USER->id, '/', $file->get_filename());
+            if ($existingfile) {
+                $existingfile->delete();
+            }
 
             try {
                 // Save the file in Moodle's file system.
@@ -116,4 +122,10 @@ function local_profile_directory_extend_navigation_course(\navigation_node $navi
         new pix_icon('i/report', ''),
     );
 
+}
+
+function check($data) {
+    echo "<pre>";
+    var_dump($data);
+    die;
 }

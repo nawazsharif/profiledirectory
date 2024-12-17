@@ -29,45 +29,58 @@ use context_user;
  */
 class profile_form extends \moodleform {
 
-
-
     protected function definition() {
+        global $COURSE;
         $form = $this->_form;
 
         $form->addElement('header', 'profile_header', get_string('pluginname', 'local_profile_directory'));
 
         // Required fields marked with *
-        $form->addElement('text', 'firstname', get_string('firstname'), ["maxlength" => "100", "size" => "30", 'placeholder' => get_string('firstname', 'local_profile_directory')]);
+        $form->addElement('text', 'firstname', get_string('firstname'),
+        ["maxlength" => "100", "size" => "30", 'placeholder' => get_string('firstname', 'local_profile_directory')]);
         $form->setType('firstname', PARAM_TEXT);
         $form->addRule('firstname', get_string('required'), 'required', null, 'client');
 
         $form->addElement('hidden', 'userid');
         $form->setType('userid', PARAM_TEXT);
+        $form->addElement('hidden', 'courseid', $COURSE->id);
+        $form->setType('courseid', PARAM_TEXT);
 
-        $form->addElement('text', 'surname', get_string('surname', 'local_profile_directory'), ["maxlength" => "100", "size" => "30", 'placeholder' => get_string('surname', 'local_profile_directory')]);
+        $form->addElement('text', 'surname', get_string('surname',
+        'local_profile_directory'), ["maxlength" => "100", "size" => "30",
+        'placeholder' => get_string('surname', 'local_profile_directory')]);
         $form->setType('surname', PARAM_TEXT);
         $form->addRule('surname', get_string('required'), 'required', null, 'client');
 
-        $form->addElement('text', 'post_nominals', get_string('postnominals', 'local_profile_directory'), ["maxlength" => "100", "size" => "30", 'placeholder' => get_string('postnominals', 'local_profile_directory')]);
+        $form->addElement('text', 'post_nominals', get_string('postnominals',
+        'local_profile_directory'), ["maxlength" => "100", "size" => "30",
+        'placeholder' => get_string('postnominals', 'local_profile_directory')]);
         $form->setType('post_nominals', PARAM_TEXT);
 
-        $form->addElement('text', 'ahpra_number', get_string('ahpra_number', 'local_profile_directory'), ["maxlength" => "100", "size" => "30", 'placeholder' => get_string('ahpra_number', 'local_profile_directory')]);
+        $form->addElement('text', 'ahpra_number', get_string('ahpra_number',
+        'local_profile_directory'), ["maxlength" => "100", "size" => "30",
+        'placeholder' => get_string('ahpra_number', 'local_profile_directory')]);
         $form->setType('ahpra_number', PARAM_TEXT);
 
-        $form->addElement('text', 'other_associations', get_string('other_associations', 'local_profile_directory'), ["maxlength" => "100", "size" => "30", 'placeholder' => get_string('other_associations', 'local_profile_directory')]);
+        $form->addElement('text', 'other_associations', get_string('other_associations',
+        'local_profile_directory'), ["maxlength" => "100", "size" => "30", 'placeholder' => get_string('other_associations', 'local_profile_directory')]);
         $form->setType('other_associations', PARAM_TEXT);
 
-        $form->addElement('text', 'email', get_string('email'), ["maxlength" => "100", "size" => "30", 'placeholder' => get_string('email', 'local_profile_directory')]);
+        $form->addElement('text', 'email', get_string('email'),
+        ["maxlength" => "100", "size" => "30", 'placeholder' => get_string('email', 'local_profile_directory')]);
         $form->setType('email', PARAM_EMAIL);
         $form->addRule('email', get_string('required'), 'required', null, 'client');
 
-        $form->addElement('text', 'phone', get_string('phone'), ["maxlength" => "100", "size" => "30", 'placeholder' => get_string('phone', 'local_profile_directory')]);
+        $form->addElement('text', 'phone', get_string('phone'),
+        ["maxlength" => "100", "size" => "30", 'placeholder' => get_string('phone', 'local_profile_directory')]);
         $form->setType('phone', PARAM_TEXT);
 
-        $form->addElement('text', 'website', get_string('website', 'local_profile_directory'), ["maxlength" => "100", "size" => "30", 'placeholder' => get_string('website', 'local_profile_directory')]);
+        $form->addElement('text', 'website', get_string('website',
+        'local_profile_directory'), ["maxlength" => "100", "size" => "30", 'placeholder' => get_string('website', 'local_profile_directory')]);
         $form->setType('website', PARAM_URL);
 
-        $form->addElement('textarea', 'qualifications', get_string('qualifications', 'local_profile_directory'), ["rows" => "5", "cols" => "50", 'placeholder' => get_string('qualifications', 'local_profile_directory')]);
+        $form->addElement('textarea', 'qualifications', get_string('qualifications',
+        'local_profile_directory'), ["rows" => "5", "cols" => "50", 'placeholder' => get_string('qualifications', 'local_profile_directory')]);
         $form->setType('qualifications', PARAM_TEXT);
         $form->addRule('qualifications', get_string('required'), 'required', null, 'client');
 
@@ -76,7 +89,9 @@ class profile_form extends \moodleform {
             1 => 's 2',
             2 => 's3 3',
         );
-        $form->addElement('select', 'specialties', get_string('specialties', 'local_profile_directory'), $specialties);
+        $form->addElement('autocomplete', 'specialties', get_string('specialties',
+        'local_profile_directory'), $specialties,
+        ['multiple' => true]);
         $form->setType('specialties', PARAM_TEXT);
         $form->addRule('specialties', get_string('required'), 'required', null, 'client');
 
@@ -86,7 +101,8 @@ class profile_form extends \moodleform {
             'maxfiles' => 1,
             'accepted_types' => array('image'),
         );
-        $form->addElement('filemanager', 'photo', get_string('photo', 'local_profile_directory'), null, $filemanageroptions);
+        $form->addElement('filemanager', 'photo', get_string('photo',
+        'local_profile_directory'), null, $filemanageroptions);
         $form->addRule('photo', get_string('required'), 'required', null, 'client');
 
         // Category selection
@@ -108,7 +124,6 @@ class profile_form extends \moodleform {
         $draftitemid = $data->photo;
 
         if ($draftitemid) {
-
             $fileinfo = array(
                 'component' => 'local_profile_directory',
                 'filearea' => 'images',
@@ -118,9 +133,11 @@ class profile_form extends \moodleform {
                 'filename' => ''
             );
             $fileurl = local_profile_directory_file_urlcreate($context, $draftitemid, $fileinfo);
-            $record = !empty($data->userid) ? $DB->get_record('local_profile_directory', ['userid' => $data->userid]) : new \stdClass();
+            $record = !empty($data->userid) ? $DB->get_record('local_profile_directory',
+            ['userid' => $data->userid]) : new \stdClass();
 
             $record->userid = !empty($data->userid) ? $data->userid : $USER->id; // Store user ID if necessary.
+            $record->courseid = $data->courseid;
             $record->firstname = $data->firstname;
             $record->surname = $data->surname;
             $record->post_nominals = $data->post_nominals;
@@ -130,7 +147,7 @@ class profile_form extends \moodleform {
             $record->phone = $data->phone;
             $record->website = $data->website;
             $record->qualifications = $data->qualifications;
-            $record->specialties = $data->specialties;
+            $record->specialties = json_encode($data->specialties);
             $record->photourl = $fileurl;
             $record->photo = $draftitemid;
             $record->category_id = $data->category_id;
@@ -139,6 +156,7 @@ class profile_form extends \moodleform {
             if (!empty($data->userid)) {
                 $DB->update_record('local_profile_directory', $record);
             } else {
+
                 $DB->insert_record('local_profile_directory', $record);
             }
 

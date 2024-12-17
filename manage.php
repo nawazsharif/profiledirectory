@@ -39,30 +39,44 @@ $PAGE->set_secondary_active_tab('users');
 $PAGE->navbar->add(get_string('userdetails', 'local_profile_directory'), $PAGE->url);
 
 $filterdata = $DB->get_records('local_profile_directory');
-
 $filterform = new user_filter($url, $filterdata);
-$data = "";
-
+$userdata = [];
 
 if ($formdata = $filterform->get_data()) {
-    // $data = $DB->get_records('local_profile_directory',['']);
+    $conditions = [];
+    $params = [];
+
+    if ($formdata->postnominals !== "") {
+        $conditions[] = "post_nominals = :postnominals";
+        $params['postnominals'] = array_column($filterdata, 'post_nominals')[$formdata->postnominals];
+    }
+
+    if ($formdata->category !== "") {
+        $conditions[] = "category_id = :category";
+        $params['category'] = array_column($filterdata, 'category_id')[$formdata->category];
+    }
+
+    if ($formdata->qualifications !== "") {
+        $conditions[] = "qualifications = :qualification";
+        $params['qualification'] = array_column($filterdata, 'qualifications')[$formdata->qualifications];
+    }
+
+    $sql = "SELECT * FROM {local_profile_directory}";
+    if (!empty($conditions)) {
+        $sql .= " WHERE " . implode(" AND ", $conditions);
+    }
+
+    $userdata = $DB->get_records_sql($sql, $params);
 
 } else {
-    $sql = "SELECT id, firstname, surname, userid
-    FROM {local_profile_directory}";
-    $data = $DB->get_records_sql($sql);
+    $userdata = $DB->get_records('local_profile_directory');
 }
-
-$default = array_values($data)[0]->userid;
-$userdata = [];
-$userdata = $DB->get_record('local_profile_directory', ['userid' => $userid > 0 ? $userid : $default]);
 
 echo $OUTPUT->header();
 
 $context = [
     'filterform' => $filterform->render(),
-    'user' => array_values($data),
-    'userdata' => $userdata,
+    'userdata' => array_values($userdata),
 ];
 echo $OUTPUT->render_from_template('local_profile_directory/user_management', $context);
 echo $OUTPUT->footer();

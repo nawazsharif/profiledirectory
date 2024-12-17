@@ -28,15 +28,40 @@ use moodleform;
  */
 class user_filter extends moodleform {
 
-
     public function definition() {
         global $CFG;
         $form = $this->_form;
         $filterdata = $this->_customdata;
-        $form->addElement('select', 'postnominals', get_string('postnominals', 'local_profile_directory'), array_column($filterdata, 'post_nominals'));
-        $form->addElement('select', 'qualifications', get_string('qualifications', 'local_profile_directory'), array_column($filterdata, 'qualifications'));
-        $form->addElement('select', 'specialties', get_string('specialties', 'local_profile_directory'), array_column($filterdata, 'specialties'));
-        $this->add_action_buttons(false, get_string('submit', 'local_profile_directory'));
-    }
+        $elements = array();
+        // $speciality = array_merge(...array_map(function ($data) {
+        // return (array)json_decode($data);
+        // }, array_column($filterdata, 'specialties')));
 
+        // Adding label and select elements for Postnominals
+        $elements[] = $form->createElement('html', '<div class="d-flex flex-wrap justify-content-between align-items-center w-100">');
+        $elements[] = $form->createElement('html', '<div class="form-group">');
+        $elements[] = $form->createElement('static', 'postnominals_label', '', get_string('postnominals', 'local_profile_directory'));
+        $elements[] = $form->createElement('select', 'postnominals', '', array_merge(['' => 'Select'], array_column($filterdata, 'post_nominals')));
+        $elements[] = $form->createElement('html', '</div>'); // Close the div for Postnominals
+
+        // Adding label and select elements for Qualifications
+        $elements[] = $form->createElement('html', '<div class="form-group">');
+        $elements[] = $form->createElement('static', 'qualifications_label', '', get_string('qualifications', 'local_profile_directory'));
+        $elements[] = $form->createElement('select', 'qualifications', '', array_merge(['' => 'Select'], array_column($filterdata, 'qualifications')));
+        $elements[] = $form->createElement('html', '</div>'); // Close the div for Qualifications
+
+        // Adding label and select elements for Specialties
+        $elements[] = $form->createElement('html', '<div class="form-group">');
+        $elements[] = $form->createElement('static', 'specialties_label', '', get_string('category', 'local_profile_directory'));
+        $elements[] = $form->createElement('select', 'category', '', array_merge(['' => 'Select'], array_column($filterdata, 'category_id')));
+        $elements[] = $form->createElement('html', '</div>'); // Close the div for Specialties
+        $elements[] = $form->createElement('html', '</div>'); // Close the div for Specialties
+
+        // Adding all elements to the form in a group
+        $form->addGroup($elements, 'filter_group', '', array(' '), false);
+
+        // Add submit button with the correct label
+        $this->add_action_buttons(true, get_string('submit', 'local_profile_directory'));
+
+    }
 }

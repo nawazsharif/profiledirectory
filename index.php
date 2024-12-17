@@ -24,7 +24,8 @@
 
 require('../../config.php');
 use local_profile_directory\profile_form;
-$courseid = required_param('id', PARAM_INT);
+$courseid = optional_param('id', 0, PARAM_INT);
+$userid = optional_param('user', 0, PARAM_INT);
 require_login($courseid);
 $url = new moodle_url('/local/profile_directory/index.php', ['id' => $courseid]);
 $PAGE->set_url($url);
@@ -38,15 +39,22 @@ if ($form->is_cancelled()) {
     redirect(new moodle_url('/course/view.php', ['id' => $courseid]));
 } else if ($data = $form->get_data()) {
     $form->process_data($data);
-    redirect(new moodle_url('/course/view.php', ['id' => $courseid]), null, "Form Submission Success", null, \core\output\notification::NOTIFY_INFO);
+    if (isset($data->userid) && is_siteadmin()) {
+        redirect(new moodle_url('/local/profile_directory/manage.php'),
+        "Data updated Successfully", 500, \core\output\notification::NOTIFY_SUCCESS);
+    } else {
+        redirect(new moodle_url('/course/view.php', ['id' => $courseid]),
+        "Data saved Success", 500, \core\output\notification::NOTIFY_INFO);
+    }
+
 }
 
 echo $OUTPUT->header();
-$userdata = $DB->get_record('local_profile_directory', ['userid' => $USER->id]);
+$userdata = $DB->get_record('local_profile_directory', ['userid' => is_siteadmin() && $userid ? $userid : $USER->id]);
 if ($userdata) {
+    $userdata->specialties = json_decode($userdata->specialties);
     $form->set_data($userdata);
 }
 $form->display();
-
 
 echo $OUTPUT->footer();
