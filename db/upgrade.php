@@ -45,7 +45,7 @@ function xmldb_local_profile_directory_upgrade($oldversion) {
         }
 
         // Quiz savepoint reached.
-        upgrade_plugin_savepoint(true, 2024121001, 'local', 'local_profile_directory');
+        upgrade_plugin_savepoint(true, 2024121001, 'local', 'profile_directory');
     }
     return true;
 }
