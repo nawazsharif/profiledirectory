@@ -24,14 +24,14 @@
 
 require('../../config.php');
 use local_profile_directory\profile_form;
-$courseid = optional_param('id', 0, PARAM_INT);
+global $USER;
+$courseid = optional_param('id', $USER->id, PARAM_INT);
 $userid = optional_param('user', 0, PARAM_INT);
 require_login($courseid);
 $url = new moodle_url('/local/profile_directory/index.php', ['id' => $courseid]);
 $PAGE->set_url($url);
 $context = context_course::instance($courseid);
 $PAGE->set_context($context);
-// $PAGE->set_heading($SITE->fullname);
 
 $form = new profile_form(new moodle_url('/local/profile_directory/index.php', ['id' => $courseid]));
 
@@ -40,8 +40,9 @@ if ($form->is_cancelled()) {
 } else if ($data = $form->get_data()) {
     $form->process_data($data);
     if (isset($data->userid) && is_siteadmin()) {
-        redirect(new moodle_url('/local/profile_directory/manage.php'),
-        "Data updated Successfully", 500, \core\output\notification::NOTIFY_SUCCESS);
+        //redirect(new moodle_url('/local/profile_directory/manage.php'),
+        redirect(new moodle_url('/local/profile_directory/index.php', ['id' => $courseid]),
+            "Data updated Successfully", 500, \core\output\notification::NOTIFY_SUCCESS);
     } else {
         redirect(new moodle_url('/course/view.php', ['id' => $courseid]),
         "Data saved Success", 500, \core\output\notification::NOTIFY_INFO);

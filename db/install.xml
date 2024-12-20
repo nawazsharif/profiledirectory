@@ -6,8 +6,7 @@
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Primary key"/>
                 <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="user key"/>
-                <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="user key"/>
-                <FIELD NAME="firstname" TYPE="char" LENGTH="255" NOTNULL="true" COMMENT="First name"/>
+                <FIELD NAME="firstname" TYPE="char" LENGTH="255" NOTNULL="true" COMMENT="Surname"/>
                 <FIELD NAME="surname" TYPE="char" LENGTH="255" NOTNULL="true" COMMENT="Surname"/>
                 <FIELD NAME="post_nominals" TYPE="char" LENGTH="255" COMMENT="Post-nominals"/>
                 <FIELD NAME="ahpra_number" TYPE="char" LENGTH="50" COMMENT="AHPRA number"/>

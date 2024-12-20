@@ -85,9 +85,10 @@ class profile_form extends \moodleform {
         $form->addRule('qualifications', get_string('required'), 'required', null, 'client');
 
         $specialties = array(
-            0 => 's 1',
-            1 => 's 2',
-            2 => 's3 3',
+            0 => 'IFS',
+            1 => 'MDMA',
+            2 => 'Psilocybin',
+            3 => 'Ayahuasca',
         );
         $form->addElement('autocomplete', 'specialties', get_string('specialties',
         'local_profile_directory'), $specialties,
@@ -107,9 +108,12 @@ class profile_form extends \moodleform {
 
         // Category selection
         $categories = array(
-            0 => 'Category 1',
-            1 => 'Category 2',
-            2 => 'Category 3',
+            0 => 'Harm Reduction',
+            1 => 'Holistic',
+            2 => 'Psychedelic Integration',
+            3 => 'Mindfulness',
+            4 => 'Psychodynamic',
+            5 => 'Psychotherapy',
         );
         $form->addElement('select', 'category_id', get_string('category'), $categories);
         $form->setType('category_id', PARAM_TEXT);
@@ -120,46 +124,91 @@ class profile_form extends \moodleform {
 
     public function process_data($data) {
         global $DB, $USER;
-        $context = context_user::instance($USER->id);
-        $draftitemid = $data->photo;
 
-        if ($draftitemid) {
-            $fileinfo = array(
+        // Define context.
+        $context = context_user::instance($USER->id);
+
+        // Initialize validation errors.
+        $errors = [];
+
+
+
+        // Validate required fields.
+        if (empty($data->firstname)) {
+            $errors[] = get_string('error_missing_firstname', 'local_profile_directory');
+        }
+        if (empty($data->email) || !validate_email($data->email)) {
+            $errors[] = get_string('error_invalid_email', 'local_profile_directory');
+        }
+        if (!empty($data->phone) && !preg_match('/^\+?[0-9]{10,15}$/', $data->phone)) {
+            $errors[] = get_string('error_invalid_phone', 'local_profile_directory');
+        }
+
+        // Stop processing if there are validation errors.
+        if (!empty($errors)) {
+            debugging(implode("\n", $errors), DEBUG_DEVELOPER);
+            return false;
+        }
+
+        // Process file upload if draft item ID is provided.
+        $fileurl = null;
+        if (!empty($data->photo)) {
+            $draftitemid = $data->photo;
+
+            $fileinfo = [
                 'component' => 'local_profile_directory',
                 'filearea' => 'images',
                 'itemid' => $USER->id,
                 'contextid' => $context->id,
                 'filepath' => '/',
-                'filename' => ''
-            );
-            $fileurl = local_profile_directory_file_urlcreate($context, $draftitemid, $fileinfo);
-            $record = !empty($data->userid) ? $DB->get_record('local_profile_directory',
-            ['userid' => $data->userid]) : new \stdClass();
+                'filename' => '' // Allow the function to generate the filename dynamically.
+            ];
 
-            $record->userid = !empty($data->userid) ? $data->userid : $USER->id; // Store user ID if necessary.
-            $record->courseid = $data->courseid;
-            $record->firstname = $data->firstname;
-            $record->surname = $data->surname;
-            $record->post_nominals = $data->post_nominals;
-            $record->ahpra_number = $data->ahpra_number;
-            $record->other_associations = $data->other_associations;
-            $record->email = $data->email;
-            $record->phone = $data->phone;
-            $record->website = $data->website;
-            $record->qualifications = $data->qualifications;
-            $record->specialties = json_encode($data->specialties);
-            $record->photourl = $fileurl;
-            $record->photo = $draftitemid;
-            $record->category_id = $data->category_id;
-            $record->timecreated = $data->timecreated ?? time();
-            $record->timemodified = time();
+            // Custom function to process and generate file URL.
+            $fileurl = local_profile_directory_file_urlcreate($context, $draftitemid, $fileinfo);
+            if (!$fileurl) {
+                debugging(get_string('error_file_upload_failed', 'local_profile_directory'), DEBUG_DEVELOPER);
+                return false;
+            }
+        }
+
+        // Retrieve or create a new record.
+        $record = !empty($data->userid)
+            ? $DB->get_record('local_profile_directory', ['userid' => $data->userid])
+            : new \stdClass();
+
+        // Populate the record.
+        $record->userid = !empty($data->userid) ? $data->userid : $USER->id;
+        $record->courseid = $data->courseid ?? null;
+        $record->firstname = clean_param($data->firstname, PARAM_TEXT);
+        $record->surname = clean_param($data->surname, PARAM_TEXT);
+        $record->post_nominals = clean_param($data->post_nominals, PARAM_TEXT);
+        $record->ahpra_number = clean_param($data->ahpra_number, PARAM_TEXT);
+        $record->other_associations = clean_param($data->other_associations, PARAM_TEXT);
+        $record->email = clean_param($data->email, PARAM_EMAIL);
+        $record->phone = clean_param($data->phone, PARAM_TEXT);
+        $record->website = clean_param($data->website, PARAM_URL);
+        $record->qualifications = clean_param($data->qualifications, PARAM_TEXT);
+        $record->specialties = !empty($data->specialties) ? json_encode($data->specialties) : null;
+        $record->photourl = $fileurl;
+        $record->photo = $draftitemid ?? null;
+        $record->category_id = $data->category_id ?? null;
+        $record->timecreated = $data->timecreated ?? time();
+        $record->timemodified = time();
+
+        try {
+            // Update or insert the record.
             if (!empty($data->userid)) {
                 $DB->update_record('local_profile_directory', $record);
             } else {
-
                 $DB->insert_record('local_profile_directory', $record);
             }
-
+        } catch (dml_exception $e) {
+            debugging(get_string('error_database_operation', 'local_profile_directory') . ': ' . $e->getMessage(), DEBUG_DEVELOPER);
+            return false;
         }
+
+        return true;
     }
+
 }

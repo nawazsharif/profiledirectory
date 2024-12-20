@@ -52,21 +52,18 @@ Example context (json):
 .name {
     font-size: 1.3rem;
     font-weight: bold;
-    color: #7B1B67;
     margin: 10px 0 5px;
 }
 
 /* Role text */
 .role {
     font-size: 0.9rem;
-    color: #8E538F;
     margin-bottom: 15px;
 }
 
 /* Description text */
 .description {
     font-size: 0.8rem;
-    color: #C27DB4;
     margin-bottom: 20px;
     line-height: 1.4;
     padding: 0 10px;
@@ -94,39 +91,24 @@ Example context (json):
 
 /* Message button */
 .message-btn {
-    background-color: white;
     display: inline-block;
-    color: #A64D8F;
-    border: 2px solid #A64D8F;
+    border: 2px solid;
 }
 #id_submitbutton, #id_cancel {
-    background-color: white;
     display: inline-block;
-    color: #A64D8F;
-    border: 2px solid #A64D8F;
+    border: 2px solid;
     text-align: center;
 }
 #id_submitbutton:hover, #id_cancel:hover {
-    background-color: #FDE9F7;
 }
 .message-btn:hover {
-    background-color: #FDE9F7;
 }
 .filter {
-    background-color: white;
-    color: #A64D8F;
-    border: 1px solid #a64d8e5e;
+    border: 1px solid;
 }
 
 /* Connect button */
-.connect-btn {
-    background-color: #A64D8F;
-    color: white;
-}
 
-.connect-btn:hover {
-    background-color: #7B1B67;
-}
 /* Add some space between form elements */
 .form-group {
     margin-bottom: 20px;
@@ -137,7 +119,7 @@ Example context (json):
     min-width: 200px;
     padding: 8px;
     font-size: 16px;
-    border: 1px solid #ccc;
+    border: 1px solid;
     border-radius: 4px;
 }
 
@@ -157,9 +139,7 @@ Example context (json):
 
 
 <div class="container">
-<div class="mb-5 p-3 rounded filter">
-    {{{filterform}}}
-   </div>
+
 <div class="d-flex flex-wrap">
     {{#userdata}}
     <div class="profile-card m-2">
@@ -172,7 +152,6 @@ Example context (json):
             {{qualifications}}
         </p>
         <div class="button-group">
-            <a href="index.php?id={{courseid}}&user={{userid}}" class="message-btn text-decoration-none">Edit</a>
             <a href="view.php?user={{userid}}" class="connect-btn text-decoration-none">View</a>
         </div>
     </div>

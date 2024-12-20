@@ -47,3 +47,10 @@ $string['surname'] = 'Surname';
 $string['surname_required'] = 'Surname is required';
 $string['website'] = 'Website';
 $string['userdetails'] = "User Management";
+$string['error_missing_firstname'] = 'First name is required.';
+$string['error_invalid_email'] = 'Invalid email address.';
+$string['error_invalid_phone'] = 'Invalid phone number format.';
+$string['error_file_upload_failed'] = 'File upload failed. Please try again.';
+$string['error_database_operation'] = 'An error occurred while saving data to the database.';
+$string['error_prohibited_word'] = 'An error occurred while saving data to the database.';
+

@@ -30,9 +30,9 @@ $url = new moodle_url('/local/profile_directory/manage.php', []);
 $PAGE->set_url($url);
 $context = context_system::instance();
 $PAGE->set_context($context);
-$PAGE->set_pagelayout('admin');
+//$PAGE->set_pagelayout('admin');
 // $PAGE->set_title(get_string('pluginname', 'local_profile_directory'));
-$PAGE->set_heading(get_string('pluginname', 'local_profile_directory'));
+//$PAGE->set_heading(get_string('pluginname', 'local_profile_directory'));
 
 $PAGE->set_primary_active_tab('siteadminnode');
 $PAGE->set_secondary_active_tab('users');

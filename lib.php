@@ -107,22 +107,22 @@ function local_profile_directory_file_urlcreate($context, $draftitemid, $fileinf
     return false;
 }
 
-function local_profile_directory_extend_navigation_course(\navigation_node $navigation, \stdClass $course) {
-    global $CFG, $USER, $DB;
-    require_once(__DIR__ . "/locallib.php");
-
-    $url = new moodle_url($CFG->wwwroot . '/local/profile_directory/index.php', ['id' => $course->id]);
-
-    $navigation->add(
-        get_string('pluginname', 'local_profile_directory'),
-        $url,
-        navigation_node::TYPE_SETTING,
-        null,
-        null,
-        new pix_icon('i/report', ''),
-    );
-
-}
+//function local_profile_directory_extend_navigation_course(\navigation_node $navigation, \stdClass $course) {
+//    global $CFG, $USER, $DB;
+//    require_once(__DIR__ . "/locallib.php");
+//
+//    $url = new moodle_url($CFG->wwwroot . '/local/profile_directory/index.php', ['id' => $course->id]);
+//
+//    $navigation->add(
+//        get_string('pluginname', 'local_profile_directory'),
+//        $url,
+//        navigation_node::TYPE_SETTING,
+//        null,
+//        null,
+//        new pix_icon('i/report', ''),
+//    );
+//
+//}
 
 function check($data) {
     echo "<pre>";
